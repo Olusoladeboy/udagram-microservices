@@ -1,0 +1,40 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+      
+jobs:
+  build:
+    runs-on: '${{ matrix.os }}'
+    strategy:
+      matrix:
+        os:
+          - ubuntu-18.04
+        node-version:
+          - 13.x
+    steps:
+      - name: 'Set up Node.js ${{ matrix.node-version }}'
+        uses: actions/setup-node@v1
+        with:
+          node-version: '${{ matrix.node-version }}'
+      - uses: actions/checkout@v2
+      - run: echo "nothing needs to be installed"
+      - run: echo "no tests"
+      - run: docker build -t udagram-api-feed ./udagram-api-feed
+      - run: 'docker tag udagram-api-feed olusoladeboy/udagram-api-feed:v1'
+      - run: docker build -t udagram-api-user ./udagram-api-user
+      - run: 'docker tag udagram-api-user olusoladeboy/udagram-api-user:v1'
+      - run: docker build -t udagram-frontend ./udagram-frontend
+      - run: 'docker tag udagram-frontend olusoladeboy/udagram-frontend:v1'
+      - run: docker build -t udagram-reverseproxy ./udagram-reverseproxy
+      - run: 'docker tag udagram-reverseproxy olusoladeboy/udagram-reverseproxy:v1'
+      - run: >-
+          echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME"
+          --password-stdin
+      - run: 'docker push  olusoladeboy/udagram-reverseproxy:v1'
+      - run: 'docker push  olusoladeboy/udagram-api-feed:v1'
+      - run: 'docker push  olusoladeboy/udagram-api-user:v1'
+      - run: 'docker push  olusoladeboy/udagram-frontend:v1'
