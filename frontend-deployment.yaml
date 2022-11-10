@@ -72,7 +72,7 @@ spec:
                 secretKeyRef:
                   name: my-aws-secret
                   key: aws_secret_access_key
-          image: olusoladeboy/udagram-frontend:v2
+          image: olusoladeboy/udagram-frontend:v1
           name: udagram-frontend
           imagePullPolicy: Always
           ports:
