@@ -1,0 +1,80 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+spec:
+  selector:
+    matchLabels:
+      run: frontend
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        run: frontend
+    spec:
+      containers:
+        - env:
+            - name: AWS_BUCKET
+              valueFrom:
+                configMapKeyRef:
+                  name: my-configmap
+                  key: AWS_BUCKET
+            - name: AWS_REGION
+              valueFrom:
+                configMapKeyRef:
+                  name: my-configmap
+                  key: AWS_REGION
+            - name: JWT_SECRET
+              valueFrom:
+                configMapKeyRef:
+                  name: my-configmap
+                  key: JWT_SECRET
+            - name: URL
+              valueFrom:
+                configMapKeyRef:
+                  name: my-configmap
+                  key: URL
+            - name: POSTGRES_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: my-configmap
+                  key: POSTGRES_HOST
+            - name: POSTGRES_DB
+              valueFrom:
+                configMapKeyRef:
+                  name: my-configmap
+                  key: POSTGRES_DB
+            - name: POSTGRES_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: my-postgres-secret
+                  key: POSTGRES_USERNAME
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: my-postgres-secret
+                  key: POSTGRES_PASSWORD
+            - name: AWS_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: my-aws-secret
+                  key: aws_secret_access_key
+            - name: AWS_PROFILE
+              valueFrom:
+                configMapKeyRef:
+                  name: my-configmap
+                  key: AWS_PROFILE
+            - name: AWS_SECRET_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: my-aws-secret
+                  key: aws_secret_key_id
+          name: frontend
+          image: olusoladeboy/udagram-frontend:v1
+          ports:
+            - containerPort: 8100
+          resources:
+            limits:
+              cpu: 500m
+            requests:
+              cpu: 200m
