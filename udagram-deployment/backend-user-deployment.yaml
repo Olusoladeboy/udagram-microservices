@@ -72,9 +72,9 @@ spec:
           name: backend-user
           image: olusoladeboy/udagram-api-user:v1
           ports:
-            - containerPort: 80
+            - containerPort: 8080
           resources:
             limits:
-              cpu: 500m
+              cpu: 512m
             requests:
-              cpu: 200m
+              cpu: 256m

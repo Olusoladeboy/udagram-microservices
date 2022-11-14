@@ -72,9 +72,9 @@ spec:
           name: frontend
           image: olusoladeboy/udagram-frontend:v1
           ports:
-            - containerPort: 8100
+            - containerPort: 80
           resources:
-            limits:
-              cpu: 500m
             requests:
-              cpu: 200m
+              cpu: "256m"
+            limits:
+              cpu: "512m"
